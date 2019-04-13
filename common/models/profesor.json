@@ -1,0 +1,133 @@
+{
+  "name": "Profesor",
+  "plural": "Profesores",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "nombre": {
+      "type": "string"
+    },
+    "apellidos": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "visitas": {
+      "type": "hasMany",
+      "model": "Visita",
+      "foreignKey": ""
+    },
+    "familiares": {
+      "type": "hasMany",
+      "model": "Familiar",
+      "foreignKey": "",
+      "through": "Visita"
+    },
+    "alumnos": {
+      "type": "hasMany",
+      "model": "Alumno",
+      "foreignKey": ""
+    },
+    "alumno": {
+      "type": "belongsTo",
+      "model": "Alumno",
+      "foreignKey": ""
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "__create__visitas"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "buenos"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "familiaresVisitantes"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "familiaresNoVisitantes"
+    }
+  ],
+  "methods": {
+    "buenos": {
+      "accepts": [],
+      "returns": [
+        {
+          "arg": "buenosDocentes",
+          "type": "array",
+          "root": false,
+          "description": "Los docentes que no tienen ninguna valoracion negativa"
+        }
+      ],
+      "description": "Devuelve los docentes que no tienen ninguna valoracion negativa(<4)",
+      "http": [
+        {
+          "path": "/buenos",
+          "verb": "get"
+        }
+      ]
+    },
+    "prototype.familiaresVisitantes": {
+      "accepts": [],
+      "returns": [
+        {
+          "arg": "familiares",
+          "type": "array",
+          "root": false,
+          "description": "Los familiares que han visitado al profesor"
+        }
+      ],
+      "description": "Muestra los familiares que han visitado a un determinado profesor",
+      "http": [
+        {
+          "path": "/familiaresVisitantes",
+          "verb": "get"
+        }
+      ]
+    },
+    "prototype.familiaresNoVisitantes": {
+      "accepts": [],
+      "returns": [
+        {
+          "arg": "familiares",
+          "type": "array",
+          "root": false,
+          "description": "Los familiares que no han visitado al profesor"
+        }
+      ],
+      "description": "Muestra los familiares que no han visitado a un determinado profesor",
+      "http": [
+        {
+          "path": "/familiaresNoVisitantes",
+          "verb": "get"
+        }
+      ]
+    }
+  }
+}
